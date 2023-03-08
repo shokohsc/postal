@@ -1,0 +1,29 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: postal
+spec:
+  template:
+    spec:
+      containers:
+        - name: postal
+          image: shokohsc/postal
+          env:
+            - name: ENV
+              value: development
+            - name: API_GATEWAY_HOST
+              value: dev.sidekick.shokohsc.home
+            - name: API_GATEWAY_PORT
+              value: "443"
+            - name: USE_SENTRY
+              value: "true"
+            - name: SENTRY_DSN
+              value: https://2f15ffed2e254ced911e78de9312afe0\@glitchtip.shokohsc.home/1
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64M
+            limits:
+              cpu: 1000m
+              memory: 256M
