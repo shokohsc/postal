@@ -4,14 +4,14 @@
     <div class="hero is-dark">
       <Navbar />
       <div id="columns" class="columns is-mobile is-gapless">
-        <div id="mailboxes" class="column is-2-desktop is-hidden-touch">
+        <div id="mailboxes" class="column is-2-desktop">
           <Mailboxes />
         </div>
         <div id="view" class="column is-10-desktop is-full-mobile">
           <router-view />
         </div>
       </div>
-      <button class="button is-black js-modal-trigger" data-target="draft">
+      <button id="draft-button" class="button is-black js-modal-trigger" data-target="draft">
         Draft
       </button>
       <Draft />
@@ -24,6 +24,55 @@ import Navbar from './components/Navbar.vue'
 import Mailboxes from './components/Mailboxes.vue'
 import Draft from './components/Draft.vue'
 import 'virtual:fonts.css'
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Functions to open and close a modal
+    function openModal($el) {
+      $el.classList.add('is-active');
+    }
+
+    function closeModal($el) {
+      $el.classList.remove('is-active');
+    }
+
+    function closeAllModals() {
+      (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+        closeModal($modal);
+      });
+    }
+
+    // Add a click event on buttons to open a specific modal
+    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+      const modal = $trigger.dataset.target;
+      const $target = document.getElementById(modal);
+
+      $trigger.addEventListener('click', () => {
+        openModal($target);
+      });
+    });
+
+    // Add a click event on various child elements to close the parent modal
+    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .cancel .mailbox') || []).forEach(($close) => {
+      const $target = $close.closest('.modal');
+
+      $close.addEventListener('click', () => {
+        closeModal($target);
+      });
+    });
+
+    // Add a keyboard event to close all modals
+    document.addEventListener('keydown', (event) => {
+      const e = event || window.event;
+
+      if (e.keyCode === 27) { // Escape key
+        closeAllModals();
+      }
+    });
+  });
+})
+
 </script>
 
 <style>
@@ -40,12 +89,14 @@ body::-webkit-scrollbar {
 .columns {
   overflow-x: auto;
 }
-#mailboxes {
+.mailboxes {
   overflow-y: auto;
   overflow-x: auto;
   height: calc(100vh);
+  background-color: #23232e;
+  color: aliceblue;
 }
-#mailboxes::-webkit-scrollbar {
+.mailboxes::-webkit-scrollbar {
   display: none;
 }
 #view {
@@ -62,7 +113,7 @@ body::-webkit-scrollbar {
 	margin-left: 0;
 	margin-right: 0;
 }
-.js-modal-trigger {
+#draft-button {
   position: absolute;
   bottom: 2%;
   right: 5%;

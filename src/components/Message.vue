@@ -3,10 +3,15 @@
     <h1 class="title has-text-centered">{{ messages[0].envelope.subject }}</h1>
     <article class="message is-black">
       <div class="message-header">
-        <p>
-          {{ messages[0].envelope.sender[0].name }}
+        <p v-if="'sent' === route.params.mailbox.toLowerCase()">
+          {{ messages[0].envelope.to[0].name }}
           <br>
-          {{ messages[0].envelope.sender[0].address }}
+          {{ messages[0].envelope.to[0].address }}
+        </p>
+        <p v-if="'sent' !== route.params.mailbox.toLowerCase()">
+          {{ messages[0].envelope.from[0].name }}
+          <br>
+          {{ messages[0].envelope.from[0].address }}
         </p>
         <p>{{ date(messages[0].envelope.date) }}</p>
       </div>

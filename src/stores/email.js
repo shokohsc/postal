@@ -25,7 +25,8 @@ const useEmailStore = defineStore('email', {
       subject: "",
       message: "",
       attachments: []
-    }
+    },
+    _query: ""
   }),
   persist: {
     storage: sessionStorage,
@@ -34,7 +35,8 @@ const useEmailStore = defineStore('email', {
   getters: {
     mailboxes: state => state._mailboxes,
     messages: state => reverse(state._messages),
-    draft: state => state._draft
+    draft: state => state._draft,
+    query: state => state._query
   },
   actions: {
     async getMailboxes(params = {}, reset = true) {
@@ -131,8 +133,38 @@ const useEmailStore = defineStore('email', {
       message: "",
       attachments: []
     }
-
-    return
+  },
+  async getResults(params = {}, reset = true) {
+    if (reset)
+      this._messages = []
+    this.loadingMessages = true
+    this.error = false
+    try {
+      const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/results'
+      const response = await axios.get(url, {
+        params,
+        headers: {
+          'Cache-Control': `public,max-age=60`
+        }
+      })
+      response.data.forEach((message, i) => {
+        this._messages.push({
+          uid: message.uid,
+          flags: message.flags,
+          bodyStructure: message.bodyStructure,
+          envelope: message.envelope,
+          bodyParts: message.bodyParts ? message.bodyParts: undefined,
+          // headers: message.headers ? message.headers: undefined,
+          preview: message.preview,
+          route: { name: 'Message', params: { mailbox: message.mailbox, uid: message.uid }}
+        })
+      })
+      this.loadingMessages = false
+    } catch (e) {
+      this.error = e.message || 'Error happened'
+      console.error(e)
+      this.loadingMessages = false
+    }
   }
 })
 

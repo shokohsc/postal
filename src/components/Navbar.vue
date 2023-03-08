@@ -1,7 +1,7 @@
 <template>
-    <nav id="navbar" class="navbar is-fixed-top is-hidden-desktop" role="navigation" aria-label="main navigation">
+    <nav id="navbar" class="navbar is-hidden-desktop" role="navigation" aria-label="main navigation">
         <div class="navbar-brand left-burger">
-            <a @click="toggleMailboxes" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="mailboxes">
+            <a role="button" class="navbar-burger burger js-modal-trigger" aria-label="menu" aria-expanded="false" data-target="mailboxes-mobile">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -12,7 +12,7 @@
                 <div class="navbar-item">
                     <div class="field">
                         <div class="control">
-                            <input class="input" type="text" placeholder="" value="">
+                            <input class="input" type="text" placeholder="" v-model="query">
                         </div>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
                 <a class="navbar-item" href="#">
                     <span class="icon">
                         <i class="fa-solid fa-search" />
-                    </span> 
+                    </span>
                 </a>
             </div>
         </div>
@@ -31,12 +31,10 @@
 <script setup>
 import 'virtual:fonts.css'
 
-// Get the mailboxes menu element
-const toggleMailboxes = async () => { 
-  const mailboxes = document.getElementById('mailboxes')
-  mailboxes.classList.toggle('is-hidden-touch')
-  mailboxes.classList.toggle('is-10-mobile')
-}
+import { storeToRefs } from 'pinia'
+import { useEmailStore } from '../stores/email'
+
+const { query } = storeToRefs(useEmailStore())
 </script>
 
 <style scoped>
