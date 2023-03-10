@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 import { VitePluginFonts } from 'vite-plugin-fonts'
 import { fileURLToPath, URL } from "node:url";
 
@@ -9,7 +10,9 @@ export default defineConfig({
     sourcemap: true, // Source map generation must be turned on
   },
   plugins: [
-    vue(),
+    vue({
+      template: { transformAssetUrls }
+    }),
     VitePluginFonts({
       custom: {
         families: [{
@@ -23,6 +26,9 @@ export default defineConfig({
         injectTo: 'head-prepend'
       },
     }),
+    quasar({
+      sassVariables: 'src/quasar-variables.sass'
+    })
   ],
   resolve: {
     alias: {

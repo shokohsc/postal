@@ -1,42 +1,30 @@
 <template>
-  <aside class="menu is-hidden-touch">
-    <ul class="menu-list">
-      <li v-if="loadingMailboxes">Loading mailboxes</li>
-      <li v-for="(mailbox, index) in mailboxes" :key="index">
-        <router-link :to="mailbox.route">
-          <span v-if=mailbox.icon class="icon">
-            <i :class=mailbox.icon />
-          </span>
-          <span v-else class="icon">
-            <i class="fa-solid fa-folder" />
-          </span> 
-          {{ mailbox.path.toLowerCase() }} <span v-if="0 < mailbox.unseen" class="tag is-rounded is-pulled-right">{{ mailbox.unseen }}</span>
-        </router-link>
-      </li>
-    </ul>
-  </aside>
+  <q-list dense>
+    <q-item dense v-if="loadingMailboxes">
+      <q-item-section>
+        <q-spinner
+          color="primary"
+          size="3em"
+          :thickness="10"
+        />
+      </q-item-section>
+    </q-item>
 
-  <div id="mailboxes-mobile" class="mailboxes modal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <section class="modal-card-body">
-        <ul class="menu-list">
-          <li v-if="loadingMailboxes">Loading mailboxes</li>
-          <li v-for="(mailbox, index) in mailboxes" :key="index">
-            <router-link :to="mailbox.route" class="mailbox">
-              <span v-if=mailbox.icon class="icon">
-                <i :class=mailbox.icon />
-              </span>
-              <span v-else class="icon">
-                <i class="fa-solid fa-folder" />
-              </span> 
-              {{ mailbox.path.toLowerCase() }} <span v-if="0 < mailbox.unseen" class="tag is-rounded is-pulled-right">{{ mailbox.unseen }}</span>
-            </router-link>
-          </li>
-        </ul>
-      </section>
-    </div>
-  </div>
+    <q-item class="mailboxes" dense clickable v-ripple v-for="(mailbox, index) in mailboxes" :key="index" :to="mailbox.route">
+      <q-item-section side>
+        <q-icon right :name="mailbox.icon" v-if=mailbox.icon>
+          <q-badge rounded floating :label="mailbox.unseen" v-if="0 < mailbox.unseen" />
+        </q-icon>
+        <q-icon right name="fa-solid fa-folder" v-else>
+          <q-badge rounded floating :label="mailbox.unseen" v-if="0 < mailbox.unseen" />
+        </q-icon>
+      </q-item-section>
+
+      <q-item-section side>
+        {{ mailbox.path.toLowerCase() }}
+      </q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <script setup>
@@ -53,18 +41,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-aside {
+.mailboxes {
   font-family: "Code New Roman" !important;
+  text-decoration: none;
+  color: white;
 }
-.menu-list li a {
-  text-decoration: none !important;
-}
-.menu-list li:hover {
-  color: #2a2a2a
-}
-section.modal-card-body {
-  background-color: #23232e;
-  color: aliceblue;
-}
-
 </style>

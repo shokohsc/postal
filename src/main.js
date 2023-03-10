@@ -1,5 +1,8 @@
-import "../node_modules/bulma/css/bulma.css"
 import "@fortawesome/fontawesome-free/css/all.css"
+import { Quasar } from 'quasar'
+import quasarIconSet from 'quasar/icon-set/svg-fontawesome-v6'
+import '@quasar/extras/fontawesome-v6/fontawesome-v6.css'
+import 'quasar/src/css/index.sass'
 import * as Sentry from "@sentry/vue"
 import { BrowserTracing } from "@sentry/tracing"
 import { ExtraErrorData as ExtraErrorDataIntegration } from "@sentry/integrations"
@@ -59,6 +62,22 @@ if (getEnv('USE_SENTRY') === 'true') {
   });
 }
 
+app.use(Quasar, {
+  plugins: {}, // import Quasar plugins and add here
+  iconSet: quasarIconSet,
+  /*
+  config: {
+    brand: {
+      // primary: '#e46262',
+      // ... or all other brand colors
+    },
+    notify: {...}, // default set of options for Notify Quasar plugin
+    loading: {...}, // default set of options for Loading Quasar plugin
+    loadingBar: { ... }, // settings for LoadingBar Quasar plugin
+    // ..and many more (check Installation card on each Quasar component/directive/plugin)
+  }
+  */
+})
 app.use(router)
 app.use(pinia)
 app.mount('#app')

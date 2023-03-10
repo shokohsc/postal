@@ -1,24 +1,26 @@
 <template>
-  <div v-if="!loadingMessages">
-    <h1 class="title has-text-centered">{{ messages[0].envelope.subject }}</h1>
-    <article class="message is-black">
-      <div class="message-header">
-        <p v-if="'sent' === route.params.mailbox.toLowerCase()">
-          {{ messages[0].envelope.to[0].name }}
-          <br>
-          {{ messages[0].envelope.to[0].address }}
-        </p>
-        <p v-if="'sent' !== route.params.mailbox.toLowerCase()">
-          {{ messages[0].envelope.from[0].name }}
-          <br>
-          {{ messages[0].envelope.from[0].address }}
-        </p>
-        <p>{{ date(messages[0].envelope.date) }}</p>
-      </div>
-      <div class="message-body">
-        <span v-html="messages[0].preview.html ? messages[0].preview.html : messages[0].preview.textAsHtml" />
-      </div>
-    </article>
+  <q-list bordered v-if="!loadingMessages">
+    <q-item>
+      <q-item-section avatar>
+        <q-avatar color="primary" text-color="white">
+          {{ messages[0].envelope.from[0].name[0] || messages[0].envelope.from[0].address[0] }}
+        </q-avatar>
+      </q-item-section>
+
+      <q-item-section>
+        <q-item-label>{{ messages[0].envelope.subject }}</q-item-label>
+        <q-item-label><span class="text-weight-bold">{{ messages[0].envelope.from[0].name || messages[0].envelope.from[0].address.split('@')[1] }}</span></q-item-label>
+        <q-item-label caption lines="1">{{ messages[0].envelope.from[0].address }}</q-item-label>
+      </q-item-section>
+
+      <q-item-section side top>
+        {{ date(messages[0].envelope.date) }}
+      </q-item-section>
+    </q-item>
+  </q-list>
+  <div v-html="messages[0].preview.html" v-if="messages[0].preview.html" />
+  <div v-else>
+    {{ messages[0].preview.textAsHtml }}
   </div>
 </template>
 

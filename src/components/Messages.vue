@@ -1,24 +1,38 @@
 <template>
-  <div class="has-text-centered">
-    <h1 class="title">{{ mailbox.toLowerCase() }}</h1>
-  </div>
-  <ul class="is-hoverable is-fullwidth is-dark">
-    <li v-if="loadingMessages">Loading messages</li>
-    <li v-if="!loadingMessages && 0 === messages.length">No messages</li>
-      <li v-for="(message, index) in messages" :key="index">
-        <router-link :to="message.route">
-          <div>
-            <span class="has-text-grey is-size-7 is-pulled-right">{{ date(message.envelope.date) }}</span>
-            <strong v-if="'sent' === mailbox.toLowerCase()">{{ message.envelope.to[0].name }}</strong> <small v-if="'sent' === mailbox.toLowerCase()">{{ message.envelope.to[0].address }}</small>
-            <strong v-if="'sent' !== mailbox.toLowerCase()">{{ message.envelope.from[0].name }}</strong> <small v-if="'sent' !== mailbox.toLowerCase()">{{ message.envelope.from[0].address }}</small>
-          </div>
-          
-          <div>
-            <span class="has-text-grey is-size-6 subject">{{ message.envelope.subject }}</span>
-          </div>
-        </router-link>
-      </li>
-  </ul>
+  <q-list separator>
+    <q-item v-if="loadingMessages">
+      <q-item-section>
+        <q-spinner
+          color="primary"
+          size="3em"
+          :thickness="10"
+        />
+      </q-item-section>
+    </q-item>
+
+    <q-item v-if="!loadingMessages && 0 === messages.length">
+      <q-item-section>No messages in {{ mailbox.toLowerCase() }}</q-item-section>
+    </q-item>
+
+    <q-item clickable v-ripple v-for="(message, index) in messages" :key="index" :to="message.route">
+      <q-item-section avatar>
+        <q-avatar color="primary" text-color="white">
+          {{ message.envelope.from[0].name[0] || message.envelope.from[0].address[0] }}
+        </q-avatar>
+      </q-item-section>
+
+      <q-item-section>
+        <q-item-label>{{ message.envelope.subject }}</q-item-label>
+        <q-item-label><span class="text-weight-bold">{{ message.envelope.from[0].name || message.envelope.from[0].address.split('@')[1] }}</span></q-item-label>
+        <q-item-label caption>{{ message.envelope.from[0].address }}</q-item-label>
+        
+      </q-item-section>
+
+      <q-item-section side top>
+        {{ date(message.envelope.date) }}
+      </q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <script setup>
@@ -46,20 +60,4 @@ watch(
 </script>
 
 <style scoped>
-/* Table styles */
-li {
-  background-color: #2a2a2a;
-  margin-bottom: 2px;
-}
-
-li:hover {
-  background-color: #4a4a4a;
-}
-.subject{
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-  width: calc(100%);
-}
 </style>
