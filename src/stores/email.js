@@ -1,7 +1,7 @@
 import axios from 'axios'
 import getEnv from '../utils/env'
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import reverse from 'lodash/reverse'
+import dayjs from 'dayjs'
 
 const useEmailStore = defineStore('email', {
   state: () => ({
@@ -34,7 +34,11 @@ const useEmailStore = defineStore('email', {
   },
   getters: {
     mailboxes: state => state._mailboxes.filter((mailbox) => 'INBOX' === mailbox.path || (0 < mailbox.messages || 0 < mailbox.unseen)),
-    messages: state => reverse(state._messages),
+    messages: state => state._messages.sort((a, b) => {
+      if (dayjs(a.envelope.date).isBefore(dayjs(b.envelope.date)))
+        return 1
+      return -1
+    }),
     draft: state => state._draft,
     query: state => state._query
   },
@@ -153,7 +157,6 @@ const useEmailStore = defineStore('email', {
           bodyStructure: message.bodyStructure,
           envelope: message.envelope,
           bodyParts: message.bodyParts ? message.bodyParts: undefined,
-          // headers: message.headers ? message.headers: undefined,
           preview: message.preview,
           route: { name: 'Message', params: { mailbox: message.mailbox, uid: message.uid }}
         })

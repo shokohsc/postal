@@ -2,7 +2,7 @@
   <q-list bordered v-if="!loadingMessages">
     <q-item>
       <q-item-section avatar>
-        <q-avatar color="primary" text-color="white">
+        <q-avatar color="dark" text-color="white">
           {{ messages[0].envelope.from[0].name[0] || messages[0].envelope.from[0].address[0] }}
         </q-avatar>
       </q-item-section>

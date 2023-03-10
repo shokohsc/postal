@@ -16,7 +16,7 @@
 
     <q-item clickable v-ripple v-for="(message, index) in messages" :key="index" :to="message.route">
       <q-item-section avatar>
-        <q-avatar color="primary" text-color="white">
+        <q-avatar color="dark" text-color="white">
           {{ message.envelope.from[0].name[0] || message.envelope.from[0].address[0] }}
         </q-avatar>
       </q-item-section>
