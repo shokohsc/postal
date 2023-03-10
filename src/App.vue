@@ -8,6 +8,7 @@
         <q-toolbar-title>
           Postal
         </q-toolbar-title>
+        <Search />
       </q-toolbar>
     </q-header>
 
@@ -28,6 +29,7 @@
 import 'virtual:fonts.css'
 import Mailboxes from './components/Mailboxes.vue'
 import Draft from './components/Draft.vue'
+import Search from './components/Search.vue'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 

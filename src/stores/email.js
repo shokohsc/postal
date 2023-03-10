@@ -21,7 +21,7 @@ const useEmailStore = defineStore('email', {
     },
     _draft: {
       sender: "",
-      recipients: [],
+      recipients: "",
       subject: "",
       message: "",
       attachments: []
@@ -128,16 +128,20 @@ const useEmailStore = defineStore('email', {
       this.loadingMessage = false
     }
   },
-  async clearDraft() {
+  async clearDraft(e) {
+    console.log(e);
+    console.log('clearDraft');
      this._draft = {
       sender: "",
-      recipients: [],
+      recipients: "",
       subject: "",
       message: "",
       attachments: []
     }
   },
-  async getResults(params = {}, reset = true) {
+  async getResults(e, reset = true) {
+    console.log(e);
+    console.log('getResults');
     if (reset)
       this._messages = []
     this.loadingMessages = true
@@ -145,7 +149,7 @@ const useEmailStore = defineStore('email', {
     try {
       const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/results'
       const response = await axios.get(url, {
-        params,
+        params: this._query,
         headers: {
           'Cache-Control': `public,max-age=60`
         }
@@ -167,7 +171,12 @@ const useEmailStore = defineStore('email', {
       console.error(e)
       this.loadingMessages = false
     }
-  }
+  },
+  async clearQuery(e) {
+    console.log(e);
+    console.log('clearQuery');
+    this._query = ""
+  },
 })
 
 if (import.meta.hot) {
