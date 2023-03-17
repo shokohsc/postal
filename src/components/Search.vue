@@ -11,11 +11,13 @@
           <q-input
             v-model="query"
             label="Query"
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Please type something']"
           />
 
           <div>
-            <q-btn label="Submit" type="submit" color="primary" v-close-popup @click="getResults" />
-            <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" v-close-popup  @click="clearQuery"/>
+            <q-btn label="Submit" type="submit" color="primary" v-close-popup />
+            <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" v-close-popup />
             <q-btn label="Close" color="primary" flat class="q-ml-sm" v-close-popup />
           </div>
         </q-form>

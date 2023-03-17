@@ -18,14 +18,12 @@
       </q-item-section>
     </q-item>
   </q-list>
-  <div v-html="messages[0].preview.html" v-if="messages[0].preview.html" />
-  <div v-else>
-    {{ messages[0].preview.textAsHtml }}
-  </div>
+  <Preview :preview="messages[0].preview" />
 </template>
 
 <script setup>
 import dayjs from 'dayjs'
+import Preview from './Preview.vue'
 
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'

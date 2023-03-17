@@ -10,6 +10,11 @@
       </q-item-section>
     </q-item>
 
+    <q-item v-if="!loadingMailboxes && 0 === mailboxes.length">
+      <q-item-section>{{ error }}</q-item-section>
+    </q-item>
+
+
     <q-item class="mailboxes" dense clickable v-ripple v-for="(mailbox, index) in mailboxes" :key="index" :to="mailbox.route">
       <q-item-section side>
         <q-icon right :name="mailbox.icon" v-if=mailbox.icon>

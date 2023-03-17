@@ -4,17 +4,21 @@
     <q-card>
       <q-card-section>
         <q-form
-          @submit="postMessage"
+          @submit="onSubmit"
           @reset="clearDraft"
           class="q-gutter-md"
         >
           <q-input
-            v-model="draft.sender"
+            v-model="draft.from"
             label="From"
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Please type something']"
           />
           <q-input
-            v-model="draft.recipients"
+            v-model="recipients"
             label="To"
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Please type something']"
           />
           <q-input
             v-model="draft.subject"
@@ -50,12 +54,34 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useEmailStore } from '../stores/email'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const { error, draft } = storeToRefs(useEmailStore())
 const { postMessage, clearDraft } = useEmailStore()
 
 const prompt = ref(false)
+const recipients = ref("")
+
+const emailRegexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+const senderRegexp = /^"([^"]+)"\s+<([^<>]+)>$/
+const emailsRegexp = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})(,\s*([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}))*$/
+const isSender = async input => senderRegexp.test(input)
+const isEmail = async input => emailRegexp.test(input)
+const isEmails = async input => emailsRegexp.test(input)
+const isCarbonCopy = async input => -1 < input.search(/\,/)
+
+const onSubmit = async () => {
+  const to = -1 < recipients.value.search(/\,/g) ? recipients.value.split(',')[0] : recipients.value
+  const carbonCopy = -1 < recipients.value.search(/\,/g) && 1 < recipients.value.split(',').length ? recipients.value.replace(' ', '').split(',') : []
+
+  console.log(to);
+  console.log(carbonCopy);
+
+  // draft.value.to = to
+  // draft.value.cc = carbonCopy
+
+  // await postMessage(draft.value)
+}
 </script>
 
 <style scoped>
