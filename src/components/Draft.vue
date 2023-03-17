@@ -71,11 +71,34 @@ const isEmails = async input => emailsRegexp.test(input)
 const isCarbonCopy = async input => -1 < input.search(/\,/)
 
 const onSubmit = async () => {
-  const to = -1 < recipients.value.search(/\,/g) ? recipients.value.split(',')[0] : recipients.value
-  const carbonCopy = -1 < recipients.value.search(/\,/g) && 1 < recipients.value.split(',').length ? recipients.value.replace(' ', '').split(',') : []
+  // const to = -1 < recipients.value.search(/\,/g) ? recipients.value.split(',')[0] : recipients.value
+  // const carbonCopy = -1 < recipients.value.search(/\,/g) && 1 < recipients.value.split(',').length ? recipients.value.replace(' ', '').split(',') : []
+  // lium@example,alias@example.com, other@example.com
 
-  console.log(to);
-  console.log(carbonCopy);
+  const isRecipientValid = async () => {
+    // there are no carbon copies
+    console.log('to: ', recipients.value);
+    if (-1 === recipients.value.search(/\,/g)) {
+      return isEmail(recipients.value)
+    }
+    return false
+  }
+
+  const isCarbonCopiesValid = async () => {
+    // there are carbon copies
+    if (-1 < recipients.value.search(/\,/g)) {
+      const tos = recipients.value.replace(' ', '').split(',')
+      // remove first recipient
+      tos.shift()
+      return tos.some(recipient => !isEmail(recipient))
+    }
+    return false
+  }
+  // console.log(to);
+  // console.log(carbonCopy);
+
+  console.log('isRecipientValid', await isRecipientValid());
+  console.log('isCarbonCopiesValid', await isCarbonCopiesValid());
 
   // draft.value.to = to
   // draft.value.cc = carbonCopy
