@@ -13,8 +13,16 @@
         <q-item-label caption lines="1">{{ messages[0].envelope.from[0].address }}</q-item-label>
       </q-item-section>
 
-      <q-item-section side top>
-        {{ date(messages[0].envelope.date) }}
+      <q-item-section side>
+        <q-item-label>
+          {{ date(messages[0].envelope.date) }}
+        </q-item-label>
+        <!-- <q-item-label>
+          <q-icon name="fas fa-envelope-open" />
+        </q-item-label>
+        <q-item-label>
+          <q-icon name="fas fa-trash" />
+        </q-item-label> -->
       </q-item-section>
     </q-item>
   </q-list>

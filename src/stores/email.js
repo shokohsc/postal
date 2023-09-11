@@ -34,14 +34,19 @@ const useEmailStore = defineStore('email', {
     debug: true
   },
   getters: {
-    mailboxes: state => state._mailboxes.filter((mailbox) => 'INBOX' === mailbox.path || (0 < mailbox.messages || 0 < mailbox.unseen)),
+    mailboxes: state => state._mailboxes.filter(mailbox => 'INBOX' === mailbox.path || (0 < mailbox.messages || 0 < mailbox.unseen)),
     messages: state => state._messages.sort((a, b) => {
       if (dayjs(a.envelope.date).isBefore(dayjs(b.envelope.date)))
         return 1
       return -1
     }),
     draft: state => state._draft,
-    query: state => state._query
+    query: state => state._query,
+    unreadMailNumber: state => {
+      let unread = 0
+      state._mailboxes.forEach(mailbox => unread += mailbox.unseen)
+      return unread
+    }
   },
   actions: {
     async getMailboxes(params = {}, reset = true) {
@@ -112,9 +117,9 @@ const useEmailStore = defineStore('email', {
       this.error = false
       try {
         const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message'
-        await axios.post(url, params)
+        const response = await axios.post(url, params)
+        console.log(response);
         this.loadingMessage = false
-        await this.clearDraft()
         return
       } catch (e) {
         this.error = e.message || 'Error happened'
