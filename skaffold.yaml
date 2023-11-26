@@ -71,6 +71,8 @@ profiles:
         cache:
           repo: shokohsc/postal
         dockerfile: Dockerfile
+        buildArgs:
+          POD_NAME: '{{.GIT_COMMIT}}'
     cluster:
       dockerConfig:
         secretName: kaniko-secret
