@@ -42,6 +42,7 @@ profiles:
         - src: src/**/*.vue
           dest: .
       kaniko:
+        useNewRun: true
         cache:
           repo: shokohsc/postal
         dockerfile: Dockerfile.dev
@@ -66,6 +67,7 @@ profiles:
     artifacts:
     - image: shokohsc/postal
       kaniko:
+        useNewRun: true
         cache:
           repo: shokohsc/postal
         dockerfile: Dockerfile
