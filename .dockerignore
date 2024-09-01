@@ -26,3 +26,4 @@ skaffold.yaml
 README.md
 start.sh
 stop.sh
+ca.pem
