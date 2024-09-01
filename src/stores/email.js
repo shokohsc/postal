@@ -1,7 +1,6 @@
 import axios from 'axios'
 import getEnv from '../utils/env'
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import dayjs from 'dayjs'
 
 const useEmailStore = defineStore('email', {
   state: () => ({
@@ -19,14 +18,14 @@ const useEmailStore = defineStore('email', {
       'Trash': 'fa-solid fa-trash-can',
       'Archive': 'fa-solid fa-archive'
     },
-    _draft: {
-      from: '"Pommier Dimitri" <catchall@shokohsc.com>',
-      to: undefined,
-      cc: [],
-      subject: undefined,
-      message: undefined,
-      attachments: []
-    },
+    // _draft: {
+    //   from: '"Pommier Dimitri" <catchall@shokohsc.com>',
+    //   to: undefined,
+    //   cc: [],
+    //   subject: undefined,
+    //   message: undefined,
+    //   attachments: []
+    // },
     _query: undefined
   }),
   persist: {
@@ -35,12 +34,8 @@ const useEmailStore = defineStore('email', {
   },
   getters: {
     mailboxes: state => state._mailboxes.filter(mailbox => 'INBOX' === mailbox.path || (0 < mailbox.messages || 0 < mailbox.unseen)),
-    messages: state => state._messages.sort((a, b) => {
-      if (dayjs(a.envelope.date).isBefore(dayjs(b.envelope.date)))
-        return 1
-      return -1
-    }),
-    draft: state => state._draft,
+    messages: state => state._messages,
+    // draft: state => state._draft,
     query: state => state._query,
     unreadMailNumber: state => {
       let unread = 0
@@ -112,31 +107,6 @@ const useEmailStore = defineStore('email', {
         this.loadingMessages = false
       }
     },
-    async postMessage(params = {}) {
-      this.loadingMessage = true
-      this.error = false
-      try {
-        const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message'
-        const response = await axios.post(url, params)
-        console.log(response);
-        this.loadingMessage = false
-        return
-      } catch (e) {
-        this.error = e.message || 'Error happened'
-        console.error(e)
-        this.loadingMessage = false
-      }
-    },
-    async clearDraft() {
-      this._draft = {
-        from: '"Pommier Dimitri" <catchall@shokohsc.com>',
-        to: undefined,
-        cc: [],
-        subject: undefined,
-        message: undefined,
-        attachments: []
-      }
-    },
     async getResults(reset = true) {
       if (reset)
         this._messages = []
@@ -172,6 +142,51 @@ const useEmailStore = defineStore('email', {
     async clearQuery() {
       this._query = undefined
     },
+    // async postMessage(params = {}) {
+    //   this.loadingMessage = true
+    //   this.error = false
+    //   try {
+    //     const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message'
+    //     const response = await axios.post(url, params)
+    //     console.log(response);
+    //     this.loadingMessage = false
+    //     return
+    //   } catch (e) {
+    //     this.error = e.message || 'Error happened'
+    //     console.error(e)
+    //     this.loadingMessage = false
+    //   }
+    // },
+    // async clearDraft() {
+    //   this._draft = {
+    //     from: '"Pommier Dimitri" <catchall@shokohsc.com>',
+    //     to: undefined,
+    //     cc: [],
+    //     subject: undefined,
+    //     message: undefined,
+    //     attachments: []
+    //   }
+    // },
+    // async flagMessage(params = {}) {
+    //   this.error = false
+    //   try {
+    //     const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message/flag'
+    //     const response = await axios.post(url, params)
+    //   } catch (e) {
+    //     this.error = e.message || 'Error happened'
+    //     console.error(e)
+    //   }
+    // },
+    // async moveMessage(params = {}) {
+    //   this.error = false
+    //   try {
+    //     const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message/move'
+    //     const response = await axios.post(url, params)
+    //   } catch (e) {
+    //     this.error = e.message || 'Error happened'
+    //     console.error(e)
+    //   }
+    // },
   }
 })
 

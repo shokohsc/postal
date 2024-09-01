@@ -1,27 +1,24 @@
 <template>
-    <iframe class="preview" seamless />
+    <Letter :html="body" className="mailBody" :allowedSchemas="allowedSchemas" />
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { computed } from 'vue'
+import { Letter } from 'vue-letter'
 
 const props = defineProps({
-  preview: String
+    preview: Object
 })
-onMounted(() => {
-    const preview = props.preview.html ? props.preview.html : props.preview.textAsHtml
-    document.querySelector('iframe.preview')
-    .contentDocument.write(preview)
+const body = computed(() => {
+    return props.preview.html ? props.preview.html : props.preview.textAsHtml
 })
+const allowedSchemas = ['https', 'mailto']
 </script>
 
 <style scoped>
-iframe.preview {
-    background: grey;
-    width: calc(100vw);
-    height: calc(86vh);
-}
-iframe.preview::-webkit-scrollbar {
-    display: none !important;
+.mailBody {
+    width: 100%;
+    margin: 0 auto;
+    background-color: dimgrey;
 }
 </style>

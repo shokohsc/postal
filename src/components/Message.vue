@@ -13,20 +13,23 @@
         <q-item-label caption lines="1">{{ messages[0].envelope.from[0].address }}</q-item-label>
       </q-item-section>
 
-      <q-item-section side>
+      <!-- <q-item-section side>
         <q-item-label>
           {{ date(messages[0].envelope.date) }}
         </q-item-label>
-        <!-- <q-item-label>
-          <q-icon name="fas fa-envelope-open" />
+        <q-item-label @click="flagMessage({uid: route.params.uid, mailbox: route.params.mailbox})">
+          <q-icon name="fas fa-envelope-open"/>
         </q-item-label>
-        <q-item-label>
-          <q-icon name="fas fa-trash" />
-        </q-item-label> -->
-      </q-item-section>
+        <q-item-label v-if="route.params.mailbox !== 'Trash'" @click="moveMessage({uid: route.params.uid, mailbox: route.params.mailbox, target: 'Trash'})">
+          <q-icon name="fas fa-trash"/>
+        </q-item-label>
+      </q-item-section> -->
+    </q-item>
+
+    <q-item>
+      <Preview :preview="messages[0].preview" />
     </q-item>
   </q-list>
-  <Preview :preview="messages[0].preview" />
 </template>
 
 <script setup>
@@ -39,6 +42,7 @@ import { storeToRefs } from 'pinia'
 import { useEmailStore } from '../stores/email'
 
 const { loadingMessages, error, messages } = storeToRefs(useEmailStore())
+// const { getMessages, flagMessage, moveMessage } = useEmailStore()
 const { getMessages } = useEmailStore()
 const route = useRoute()
 

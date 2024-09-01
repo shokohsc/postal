@@ -30,6 +30,7 @@
     "vite": "^4.1.0",
     "vite-plugin-fonts": "^0.7.0",
     "vue": "^3.2.45",
+    "vue-letter": "^0.2.0",
     "vue-router": "^4.1.6"
   }
 }

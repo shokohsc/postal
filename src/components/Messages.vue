@@ -18,10 +18,10 @@
       <q-item-section>No messages in {{ mailbox.toLowerCase() }}</q-item-section>
     </q-item>
 
-    <q-item clickable v-ripple v-for="(message, index) in messages" :key="index" :to="message.route">
+    <q-item clickable v-ripple v-for="message in items" :key="message.uid" :to="message.route">
       <q-item-section avatar>
         <q-avatar color="dark" text-color="white">
-          {{ message.envelope.from[0]?.name[0]?.toUpperCase() || message.envelope.from[0]?.address[0]?.toUpperCase() }}
+          {{ message.envelope.from[0]?.name[0]?.toUpperCase() || message.envelope.from[0].address[0].toUpperCase() }}
         </q-avatar>
       </q-item-section>
 
@@ -52,6 +52,11 @@ const route = useRoute()
 
 const date = (date) => { return dayjs().isSame(dayjs(date), 'day') ? dayjs(date).format('HH:mm') : dayjs(date).format('MMM DD, YYYY') }
 const mailbox = computed(() => route.params.mailbox ? route.params.mailbox : 'INBOX')
+const items = computed(() => messages.value.sort((a, b) => {
+  if (dayjs(a.envelope.date).isBefore(dayjs(b.envelope.date)))
+    return 1
+  return -1
+}))
 
 watch(
   () => route.params.mailbox,

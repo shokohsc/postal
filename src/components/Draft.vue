@@ -34,12 +34,12 @@
             lazy-rules
             :rules="[ val => val && val.length > 0 || 'Please type something']"
           />
-          <q-file
+          <!-- <q-file
             v-model="draft.attachments"
             label="Attachments"
             multiple
             style="max-width: 300px"
-          />
+          /> -->
 
           <div>
             <q-btn label="Submit" type="submit" color="primary" />
@@ -57,7 +57,7 @@ import { storeToRefs } from 'pinia'
 import { useEmailStore } from '../stores/email'
 import { computed, ref } from 'vue'
 
-const { error, draft } = storeToRefs(useEmailStore())
+const { draft } = storeToRefs(useEmailStore())
 const { postMessage, clearDraft } = useEmailStore()
 
 const prompt = ref(false)

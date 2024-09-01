@@ -20,9 +20,9 @@
 
     <q-page-container>
       <router-view />
+      <!-- <Draft /> -->
     </q-page-container>
 
-    <!-- <Draft /> -->
 
   </q-layout>
 </template>
@@ -30,7 +30,7 @@
 <script setup>
 import 'virtual:fonts.css'
 import Mailboxes from './components/Mailboxes.vue'
-import Draft from './components/Draft.vue'
+// import Draft from './components/Draft.vue'
 import Search from './components/Search.vue'
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
