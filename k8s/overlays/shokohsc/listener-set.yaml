@@ -1,0 +1,24 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: postal
+  annotations:
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
+spec:
+  parentRef:
+    namespace: cilium
+    name: cilium
+    kind: Gateway
+    group: gateway.networking.k8s.io
+  listeners:
+  - name: postal
+    hostname: dev.postal.home.arpa
+    protocol: HTTPS
+    port: 443
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: dev-postal-cert

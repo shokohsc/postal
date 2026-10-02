@@ -1,5 +1,4 @@
 import axios from 'axios'
-import getEnv from '../utils/env'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 
 const useEmailStore = defineStore('email', {
@@ -51,7 +50,7 @@ const useEmailStore = defineStore('email', {
       this.error = false
       const query = new URLSearchParams(params)
       try {
-        const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/mailbox'
+        const url = window.location.protocol + '//sidekick.home.arpa/email/mailbox'
         const response = await axios.get(url, {
           params,
           headers: {
@@ -82,7 +81,7 @@ const useEmailStore = defineStore('email', {
       this.error = false
       const query = new URLSearchParams(params)
       try {
-        const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message'
+        const url = window.location.protocol + '//sidekick.home.arpa/email/message'
         const response = await axios.get(url, {
           params,
           headers: {
@@ -114,7 +113,7 @@ const useEmailStore = defineStore('email', {
       this.error = false
       const query = new URLSearchParams({ params: this._query })
       try {
-        const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/results'
+        const url = window.location.protocol + '//sidekick.home.arpa/email/results'
         const response = await axios.get(url, {
           params,
           headers: {
@@ -146,7 +145,7 @@ const useEmailStore = defineStore('email', {
     //   this.loadingMessage = true
     //   this.error = false
     //   try {
-    //     const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message'
+    //     const url = window.location.protocol + '//sidekick.home.arpa/email/message'
     //     const response = await axios.post(url, params)
     //     console.log(response);
     //     this.loadingMessage = false
@@ -170,7 +169,7 @@ const useEmailStore = defineStore('email', {
     // async flagMessage(params = {}) {
     //   this.error = false
     //   try {
-    //     const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message/flag'
+    //     const url = window.location.protocol + '//sidekick.home.arpa/email/message/flag'
     //     const response = await axios.post(url, params)
     //   } catch (e) {
     //     this.error = e.message || 'Error happened'
@@ -180,7 +179,7 @@ const useEmailStore = defineStore('email', {
     // async moveMessage(params = {}) {
     //   this.error = false
     //   try {
-    //     const url = window.location.protocol + '//' + getEnv('API_GATEWAY_HOST') + ':' + getEnv('API_GATEWAY_PORT') + '/email/message/move'
+    //     const url = window.location.protocol + '//sidekick.home.arpa/email/message/move'
     //     const response = await axios.post(url, params)
     //   } catch (e) {
     //     this.error = e.message || 'Error happened'

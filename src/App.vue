@@ -50,7 +50,7 @@ const toggleLeftDrawer = () => {
 }
 const $q = useQuasar()
 $q.dark.set(true)
-const title = computed(() => route.params.mailbox ? route.params.mailbox : false)
+const title = computed(() => route.params.mailbox ? route.params.mailbox === 'INBOX' ? false : route.params.mailbox : false)
 </script>
 
 <style>
